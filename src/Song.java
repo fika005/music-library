@@ -5,6 +5,9 @@ public class Song extends Entity {
     Artist artist;
     int timesPlayed;
     String runningTime;
+    Album album;
+    int id;
+    String description;
 
     /* you complete this */
     public Song() {
@@ -12,15 +15,25 @@ public class Song extends Entity {
         artist = new Artist();
         timesPlayed = 0;
         runningTime = "";
+        album = new Album();
     }
 
     /* you complete this */
-    public Song(String title, String filename, Artist artist, int timesPlayed, String runningTime) {
+    public Song(String title, String filename, Artist artist, Album album, int timesPlayed, String runningTime) {
         super(title);
         this.filename = filename;
         this.artist = artist;
+        this.album = album;
         this.timesPlayed = timesPlayed;
         this.runningTime = runningTime;
+    }
+
+    public Song(String title, Artist artist, Album album, int id, String description) {
+        super(title);
+        this.artist = artist;
+        this.album = album;
+        this.id = id;
+        this.description = description;
     }
 
     /* add setters and getters */
@@ -64,13 +77,21 @@ public class Song extends Entity {
                         timesPlayed + "; Running time: " + runningTime;
         return songOutput;
     }
-    public String toHTML() {
-        return "<tr><td> " + name + "    </td><td> " + artist.getName() + "    </td><td> " +
-                        timesPlayed + "    </td><td> " + runningTime  + "<td><input type=\"button\" " +
-                "value=\"Delete\" onclick=\"deleteRow(this)\"></td>\n" +   "</td></tr>";
+    public String toHTML(boolean playlist) {
+        String htm = "<tr><td> " + name + "    </td><td> " + artist.getName() +
+                "    </td><td> " + album.getName() + "    </td><td> " + description.substring(0, 30) + "...";
+        if (playlist) {
+            htm += "</td><td><input type=\"button\" name=\"selection\" value=\"" + name + "\"></td>\n" + "</tr>";
+        } else {
+            htm += "</td><td><form action=\"/playlist\" method=\"POST\"><button name=\"songID\" value=\"" + id + "\" type=\"submit\">add</button></form></td>\n" + "</tr>";
+        }
+        return htm;
     }
 
-    /* you complete this. Assume that two songs are equal if they have the same name and the same artist. */
+    public String toSQLPlaylist(int user) {
+        return "INSERT INTO playlists (user, song) values (" + user + ", " + this.id  + ")";
+    }
+
     public boolean equals(Song otherSong) {
         if (this.name.equals(otherSong.name) && this.artist.equals(otherSong.artist)) {
             return true;

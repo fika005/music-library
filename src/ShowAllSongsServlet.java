@@ -1,28 +1,35 @@
 package src;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class LoginServlet extends HttpServlet {
+public class ShowAllSongsServlet extends HttpServlet {
+
+
     private String message;
+    private IOManager db;
+
+    public ShowAllSongsServlet(IOManager db) {
+        super();
+        this.db = db;
+    }
 
     public void init() throws ServletException {
         // Do required initialization
-        message = "Login Page";
+        message = "Show All Songs";
     }
 
     public String getContent() {
         String result = "";
         try {
-            Scanner sc = new Scanner(new File("src/login.html"));
+            Scanner sc = new Scanner(new File("src/songs.html"));
+
             while (sc.hasNextLine()) {
                 result += sc.nextLine();
             }
@@ -42,24 +49,21 @@ public class LoginServlet extends HttpServlet {
                 cookieUserName = c.getValue();
             }
         }
-        if (!cookieUserName.equals("")) {
-            response.sendRedirect("/homePage");
+        if (cookieUserName.equals("")) {
+            response.sendRedirect("/login");
         } else {
+            String query = "SELECT songs.name as song, artists.name as artist, albums.name as album," +
+                    "songs.id as songID, artists.id as artistID, albums.id as albumID FROM songs " +
+                    "LEFT JOIN artists on songs.artist = artists.id " +
+                    "LEFT JOIN albums on songs.album = albums.id";
+            ArrayList<Song> songs = db.fetchSongs(query);
             response.setContentType("text/html");
-            String content = getContent();
-            out.println("<h2>" + message + "</h2> <br>");
-            out.println(content);
+            StringBuilder sb = new StringBuilder();
+            for (Song s: songs) {
+                sb.append(s.toHTML(false));
+            }
+            out.println(getContent() + sb.toString());
         }
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html");
-//        String message = (String) request.getSession().getAttribute("name");
-        PrintWriter out = response.getWriter();
-        out.println("<h2>" + "wrong" + "</h2> <br>");
-        String content = getContent();
-        out.println(content);
     }
 
     public void destroy() {

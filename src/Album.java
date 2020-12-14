@@ -28,6 +28,7 @@ public class Album extends Entity {
         songs = new ArrayList<Song>();
         artist = new Artist();
         totalLength = "";
+
     }
 
     /* add setters and getters here */
@@ -80,6 +81,10 @@ public class Album extends Entity {
         sb.append("</ul></td></tr>");
         //sb.setLength(sb.length() - 2);
         return sb.toString();
+    }
+
+    public String toSQL() {
+        return "INSERT INTO albums values (" + "\"" + getName()  + ")";
     }
 
     /* you complete this. Assume that two albums are equal if they have the same name and the same artist. */

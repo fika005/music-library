@@ -37,9 +37,6 @@ public class Artist extends Entity {
         this.albums = albums;
     }
 
-    /* you complete this */
-
-    /* you complete this */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Artist: ");
@@ -74,6 +71,10 @@ public class Artist extends Entity {
         sb.append("</ul></td></tr>");
 //        sb.setLength(sb.length() - 2);
         return sb.toString();
+    }
+
+    public String toSQL() {
+        return "INSERT INTO songs values (" + "\"" + getName() + "\")";
     }
     /* you complete this. Assume that two artists are equal if they have the same name. */
     public boolean equals(Artist otherArtist) {

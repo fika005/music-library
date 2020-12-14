@@ -9,34 +9,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class PlayListServlet extends HttpServlet {
     private String message;
     Library myLibrary;
     Library allData;
+    private IOManager db;
+
+    public PlayListServlet(IOManager db) {
+        super();
+        this.db = db;
+    }
 
     public void init() throws ServletException {
-        // Do required initialization
         message = "Playlist";
-        myLibrary = new Library();
-        try {
-            myLibrary.readFromFile("src/lib.txt");
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to open file!");
-            return;
-        }
-        allData = new Library();
-        try {
-            allData.readFromFile("src/data.txt");
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to open file!");
-            return;
-        }
-
     }
 
     public String getContent(String pathName) {
@@ -53,53 +42,109 @@ public class PlayListServlet extends HttpServlet {
         return result.toString();
     }
 
+    public String fetchContent(String cookieUserName) {
+        String query = "SELECT songs.name as song, artists.name as artist, albums.name as album," +
+                "songs.id as songID, artists.id as artistID, albums.id as albumID FROM songs " +
+                "LEFT JOIN artists on songs.artist = artists.id " +
+                "LEFT JOIN albums on songs.album = albums.id " +
+                "JOIN playlists on playlists.song = songs.id " +
+                "JOIN users on playlists.user = users.id " +
+                "WHERE username='" + cookieUserName + "'";
+        ArrayList<Song> songs = db.fetchSongs(query);
+
+        StringBuilder sb = new StringBuilder();
+        for (Song s: songs) {
+            sb.append(s.toHTML(true));
+        }
+        return sb.toString();
+    }
+
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<Song> allSongs = myLibrary.getSongs();
-        ArrayList<Song> dataSongs = allData.getSongs();
-
-        String[] names = request.getParameterValues("selection");
-
-        List<String> list = Arrays.asList(names);
-        if (list.size() != 0) {
-            for (String song : list) {
-                for (Song s : dataSongs) {
-                    if (song.equals(s.getName()+s.getArtist().getName())) {
-                        if (!allSongs.contains(s)) {
-                            myLibrary.writeToFile(s.toString());
-                            allSongs.add(s);
-                        }
-                    }
-                }
+//        ArrayList<Song> allSongs = myLibrary.getSongs();
+//        ArrayList<Song> dataSongs = allData.getSongs();
+        Cookie[] cookies = request.getCookies();
+        PrintWriter out = response.getWriter();
+        String cookieUserName = "";
+        for (Cookie c : cookies) {
+            if (c.getName().equals("username")) {
+                cookieUserName = c.getValue();
             }
         }
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        StringBuilder sb = new StringBuilder();
-        out.println("<h2>" + message + "</h2>" + "<br>" );
-
-        for (Song s : allSongs) {
-
-            sb.append(s.toHTML());
+        if (cookieUserName.equals("")) {
+            response.sendRedirect("/login");
+        } else {
+            String songIDStr = request.getParameter("songID");
+            int songID = Integer.parseInt(songIDStr);
+            String findQuery = "SELECT COUNT(*) as c, users.id as userID FROM playlists " +
+                    "JOIN users on users.id = playlists.user " +
+                    "WHERE username ='" + cookieUserName +
+                    "' AND song=" + songID;
+            boolean songExists = false;
+            int userID = 0;
+            try {
+                ResultSet rs = db.query(findQuery);
+                while (rs.next()) {
+                    userID = rs.getInt("userID");
+                    out.println(userID);
+                    if (rs.getInt("c") > 0) {
+                        songExists = true;
+                    }
+                }
+                if (!songExists) {
+                    String insertQuery = "INSERT INTO playlists (user, song) values (" + userID + ", " + songID + ")";
+                    db.update(insertQuery);
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            response.setContentType("text/html");
+            out.println(getContent("src/playlist.html") + fetchContent(cookieUserName));
         }
 
-        out.println(getContent("src/playlist.html") + sb.toString()
-                + getContent("src/deleteRow.html"));
+//        List<String> list = Arrays.asList(names);
+//        if (list.size() != 0) {
+//            for (String song : list) {
+//                for (Song s : dataSongs) {
+//                    if (song.equals(s.getName()+s.getArtist().getName())) {
+//                        if (!allSongs.contains(s)) {
+//                            myLibrary.writeToFile(s.toString());
+//                            allSongs.add(s);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        response.setContentType("text/html");
+//        PrintWriter out = response.getWriter();
+//        StringBuilder sb = new StringBuilder();
+//        out.println("<h2>" + message + "</h2>" + "<br>" );
+//
+//        for (Song s : allSongs) {
+//
+//            sb.append(s.toHTML(true));
+//        }
+//
+//        out.println(getContent("src/playlist.html") + sb.toString()
+//                + getContent("src/deleteRow.html"));
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<Song> allSongs = myLibrary.getSongs();
-        response.setContentType("text/html");
+        Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
-        StringBuilder sb = new StringBuilder();
-        out.println("<h2>" + message + "</h2>" + "<br>" );
-        for (Song s : allSongs) {
-
-            sb.append(s.toHTML());
+        String cookieUserName = "";
+        for (Cookie c : cookies) {
+            if (c.getName().equals("username")) {
+                cookieUserName = c.getValue();
+            }
         }
-        out.println(getContent("src/playlist.html") + sb.toString()
-                + getContent("src/deleteRow.html"));
+        if (cookieUserName.equals("")) {
+            response.sendRedirect("/login");
+        } else {
+            response.setContentType("text/html");
+            out.println(getContent("src/playlist.html") + fetchContent(cookieUserName));
+        }
     }
 
     public void destroy() {
