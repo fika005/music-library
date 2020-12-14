@@ -29,12 +29,9 @@ public class LibraryServer {
         handler.addServletWithMapping(new ServletHolder(new SignUpServlet()), "/signup");
         handler.addServletWithMapping(new ServletHolder(new HomePage(db)), "/homePage");
         handler.addServletWithMapping(new ServletHolder(new ShowAllSongsServlet(db)), "/showAllSongs");
-        handler.addServletWithMapping(new ServletHolder(new AlbumsServlet()), "/albums");
-        handler.addServletWithMapping(new ServletHolder(new ArtistsServlet()), "/artists");
         handler.addServletWithMapping(new ServletHolder(new PlayListServlet(db)), "/playlist");
-        handler.addServletWithMapping(new ServletHolder(new YourLibraryServlet()), "/yourLibrary");
         handler.addServletWithMapping(new ServletHolder(new SearchServlet()), "/search");
-        handler.addServletWithMapping(new ServletHolder(new SearchResponse()), "/searchResult");
+        handler.addServletWithMapping(new ServletHolder(new SearchResponse(db)), "/searchResult");
 
 
         server.setHandler(handler);

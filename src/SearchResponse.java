@@ -9,82 +9,112 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SearchResponse extends HttpServlet{
     private String message;
-    Library myLibrary;
+    private IOManager db;
+
+    public SearchResponse(IOManager db) {
+        super();
+        this.db = db;
+    }
 
     public void init() throws ServletException {
         // Do required initialization
         message = "Search Result";
-        myLibrary = new Library();
+    }
+
+    public String getContent(String path) {
+        String result = "";
         try {
-            myLibrary.readFromFile("src/data.txt");
+            Scanner sc = new Scanner(new File(path));
+
+            while (sc.hasNextLine()) {
+                result += sc.nextLine();
+            }
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to open file!");
-            return;
+            System.out.println("File not found");
         }
+        return result;
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
         out.println("<h2>" + message + "</h2>" + "<br>" );
         String inputParameter = request.getParameter("action");
         StringBuilder resp = new StringBuilder();
-        ArrayList<Album> albums = myLibrary.albums;
-        ArrayList<Song> songs = myLibrary.songs;
         ArrayList result = new ArrayList();
         boolean check = false;
         if (inputParameter.equals("Album Search")) {
-            for (Album a : albums) {
-                if (a.name.toLowerCase().equals(request.getParameter("input").toLowerCase())) {
+            String albumName = request.getParameter("input");
+            ArrayList<String> songNames = new ArrayList<>();
+            ArrayList<String> artistNames = new ArrayList<>();
+            String query = "SELECT artists.name as artistName, songs.name as songName  FROM albums " +
+                    "LEFT JOIN artists on artists.id = albums.artist " +
+                    "LEFT JOIN songs on songs.album = albums.id " +
+                    "WHERE albums.name='" + albumName + "'";
+            ResultSet rs = null;
+            try {
+                rs = db.query(query);
+                while (rs.next()) {
                     check = true;
-                    resp.append("<p> <b> Album's name: " + a.name + "</p><b>" + "<p> <b> Album's artist: "
-                            + a.artist.getName() + "</p><b>" + "<p> <b>" + "list of album's songs: "
-                            + "</p> </b>" + "<form action='/playlist' method=\"Post\">");
-                    for (Song s : a.getSongs()) {
-                        String songValue = s.name + a.getArtist().name;
-                        resp.append("<input type=\"checkbox\""
-                                + "name=\"selection\"" + "value=\"" + songValue + "\">"
-                                + "<label for=" + s.name + ">" + s.name
-                                + "</label><br>");
-                    }
+                    artistNames.add(rs.getString("artistName"));
+                    songNames.add(rs.getString("songName"));
                 }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-            if (check) {
-                resp.append("<br><input type=\"submit\" value=\"Add to Playlist\">\n" + "</form> ");
-            } else {
-                out.println("<p> The album name <strong><i>" + request.getParameter("input").toLowerCase() + " </strong></i>does not exist.<p>");
-            }
-        } else if (inputParameter.equals("Song Search")) {
 
-            for (Song a : songs) {
-                String songValue = a.name+a.getArtist().getName();
-                if (a.name.toLowerCase().equals(request.getParameter("input").toLowerCase())) {
-                    if (!check) {
-                        resp.append( "<p><b> Song name: " + request.getParameter("input") + "</p><b>" +
-                                "<p> <b>" + "list of songs with the entered name: "+ "</p> </b>"
-                                + "<form action='/playlist' method=\"Post\">");
-                    }
+            if (check) {
+                out.println("<h3> Album <strong><i>" + albumName + " </strong></i> is found:" );
+                StringBuilder sb = new StringBuilder();
+                for (int i=0; i < songNames.size(); i ++) {
+                    sb.append("<tr><td>").append(albumName).append("</td><td>").append(artistNames.get(i)).append(
+                            "</td><td>").append(songNames.get(i)).append("</tr>");
+                }
+                out.println(getContent("src/album.html") + sb.toString());
+            } else {
+                out.println("<p> The album name <strong><i>" + albumName + " </strong></i>does not exist in the database.<p>");
+            }
+        } else if (inputParameter.equals("Artist Search")) {
+            String artistName = request.getParameter("input");
+            ArrayList<String> songNames = new ArrayList<>();
+            ArrayList<String> albumNames = new ArrayList<>();
+            String query = "SELECT albums.name as albumName, songs.name as songName FROM artists " +
+                    "LEFT JOIN albums on albums.artist = artists.id " +
+                    "LEFT JOIN songs on songs.album = albums.id " +
+                    "WHERE artists.name='" + artistName + "'";
+            ResultSet rs = null;
+            try {
+                rs = db.query(query);
+                while (rs.next()) {
                     check = true;
-                    resp.append("<input type=\"checkbox\""
-                            + "name=\"selection\"" + "value=\"" + songValue  +  "\">"
-                            + "<label for=" + a.name + ">" + a.name + ",  " + a.getArtist().getName()
-                            + "</label><br>");
+                    albumNames.add(rs.getString("albumName"));
+                    songNames.add(rs.getString("songName"));
                 }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-            if (check) {
-                resp.append("<br><input type=\"submit\" value=\"Add to Playlist\">\n" + "</form> ");
 
+            if (check) {
+                out.println("<h3> Artist <strong><i>" + artistName + " </strong></i> is found:" );
+                StringBuilder sb = new StringBuilder();
+                for (int i=0; i < songNames.size(); i ++) {
+                    sb.append("<tr><td>").append(artistName).append("</td><td>").append(albumNames.get(i)).append(
+                            "</td><td>").append(songNames.get(i)).append("</tr>");
+                }
+                out.println(getContent("src/artists.html") + sb.toString());
             } else {
-                out.println("<p> The song name <strong><i>" + request.getParameter("input").toLowerCase() + " </strong></i>does not exist.<p>");
+                out.println("<p> The artist name <strong><i>" + artistName + " </strong></i>does not exist in the database.<p>");
             }
+
         }
-        response.setContentType("text/html");
-        out.println(resp.toString());
     }
 
     public void destroy() {

@@ -24,22 +24,18 @@ public class IOManager {
         File f = new File("src/music.db");
         if(f.exists() && !f.isDirectory()) {
             connection = DriverManager.getConnection("jdbc:sqlite:src/music.db");
-        } else {
-//            Library lib = new Library();
-//            lib.readFromFile("src/data.txt");
         }
-
     }
 
     public ResultSet query(String queryStr) throws SQLException {
         Statement statement = connection.createStatement();
-        statement.setQueryTimeout(38);
+        statement.setQueryTimeout(30);
         return statement.executeQuery(queryStr);
     }
 
     public void update(String queryStr) throws SQLException {
         Statement statement = connection.createStatement();
-        statement.setQueryTimeout(38);
+        statement.setQueryTimeout(30);
         statement.executeUpdate(queryStr);
     }
     public String fetchDescription(String songName, String artistName) throws IOException, ParseException {
