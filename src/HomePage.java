@@ -29,10 +29,10 @@ public class HomePage extends HttpServlet {
         message = "Home Page";
     }
 
-    public String getContent() {
+    public String getContent(String path) {
         String result = "";
         try {
-            Scanner sc = new Scanner(new File("src/homePage.html"));
+            Scanner sc = new Scanner(new File(path));
 
             while (sc.hasNextLine()) {
                 result += sc.nextLine();
@@ -68,6 +68,7 @@ public class HomePage extends HttpServlet {
         String un = request.getParameter("username");
         String pw = request.getParameter("password");
         String name = request.getParameter("name");
+        response.setContentType("text/html");
         if (name != null) {
             try {
                 int count = -1;
@@ -78,9 +79,13 @@ public class HomePage extends HttpServlet {
                 if (count == 0) {
                     String pwHashed = hash(pw);
                     db.update("INSERT INTO USERS (username, password) values ('" + un + "', '" + pwHashed + "')");
-                    response.sendRedirect("/login");
+                    String message = "Your account was created, Please log in!";
+                    out.println("<h2>" + message + "</h2> <br>");
+                    out.println(getContent("src/login.html"));
                 } else {
-                    out.println("<html><h2>Login Error<br></h2><p>The username already exists!</p></html>");
+                    String message = "Username already exists, Please log in!";
+                    out.println("<h2>" + message + "</h2> <br>");
+                    out.println(getContent("src/login.html"));
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -114,42 +119,21 @@ public class HomePage extends HttpServlet {
                 response.addCookie(cookie1);
                 response.addCookie(cookie2);
                 response.setContentType("text/html");
-                String content = getContent();
+                String content = getContent("src/homePage.html");
                 out.println(content);
             } else {
-                response.sendRedirect("/signup");
+                String message = "Username or password is incorrect, please try again!";
+                out.println("<h2>" + message + "</h2> <br>");
+                out.println(getContent("src/login.html"));
             }
         }
-//        String un = request.getParameter("username");
-//        String pw = request.getParameter("password");
-//        String cookieVal = "";
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie c : cookies) {
-//            if (c.getName().equals("c1")) {
-//                cookieVal = c.getValue();
-//            }
-//        }
-//        PrintWriter out = response.getWriter();
-//        if (cookieVal.equals("fika") && pw.equals("1234")) {
-//            response.setContentType("text/html");
-//            String content = getContent();
-//            out.println(content);
-//        } else {
-//            out.print("Sorry UserName or Password Error!");
-////            request.getSession(true).setAttribute("name", "Hello world");
-//            response.sendRedirect("/login");
-////            RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/login");
-////            dispatcher.forward(request, response);
-////            RequestDispatcher rd=request.getRequestDispatcher("login");
-////            rd.forward(request, response);
-////            out.println("<html><h2>Login Error<br></h2><p>The username or the password is invalid!</p></html>");
-//        }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
         String cookieUserName = "";
         for (Cookie c : cookies) {
             if (c.getName().equals("username")) {
@@ -157,10 +141,11 @@ public class HomePage extends HttpServlet {
             }
         }
         if (cookieUserName.equals("")) {
-            response.sendRedirect("/login");
+            String message = "You are not logged in, Please log in!";
+            out.println("<h2>" + message + "</h2> <br>");
+            out.println(getContent("src/login.html"));
         } else {
-            response.setContentType("text/html");
-            String content = getContent();
+            String content = getContent("src/homePage.html");
             out.println(content);
         }
     }

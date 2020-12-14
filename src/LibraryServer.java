@@ -25,9 +25,6 @@ public class LibraryServer {
         ServletHandler handler = new ServletHandler();
 
         IOManager db = new IOManager();
-        handler.addServletWithMapping(new ServletHolder(new Stage1()), "/stage1");
-        handler.addServletWithMapping(new ServletHolder(new Stage2()), "/stage2");
-        handler.addServletWithMapping(new ServletHolder(new Stage3()), "/stage3");
         handler.addServletWithMapping(new ServletHolder(new LoginServlet()), "/login");
         handler.addServletWithMapping(new ServletHolder(new SignUpServlet()), "/signup");
         handler.addServletWithMapping(new ServletHolder(new HomePage(db)), "/homePage");

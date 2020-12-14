@@ -81,9 +81,11 @@ public class Song extends Entity {
         String htm = "<tr><td> " + name + "    </td><td> " + artist.getName() +
                 "    </td><td> " + album.getName() + "    </td><td> " + description.substring(0, 30) + "...";
         if (playlist) {
-            htm += "</td><td><input type=\"button\" name=\"selection\" value=\"" + name + "\"></td>\n" + "</tr>";
+            htm += "</td><td><form action=\"/playlist\" method=\"POST\"><button name=\"DeleteSongID\" value=\"" + id +
+                    "\" type=\"submit\">Delete</button></form></td>\n" + "</tr>";
         } else {
-            htm += "</td><td><form action=\"/playlist\" method=\"POST\"><button name=\"songID\" value=\"" + id + "\" type=\"submit\">add</button></form></td>\n" + "</tr>";
+            htm += "</td><td><form action=\"/playlist\" method=\"POST\"><button name=\"AddSongID\" value=\"" + id +
+                    "\" type=\"submit\">Add</button></form></td>\n" + "</tr>";
         }
         return htm;
     }

@@ -42,14 +42,13 @@ public class PlayListServlet extends HttpServlet {
         return result.toString();
     }
 
-    public String fetchContent(String cookieUserName) {
+    public String fetchContent(String cookieUserID) {
         String query = "SELECT songs.name as song, artists.name as artist, albums.name as album," +
                 "songs.id as songID, artists.id as artistID, albums.id as albumID FROM songs " +
                 "LEFT JOIN artists on songs.artist = artists.id " +
                 "LEFT JOIN albums on songs.album = albums.id " +
                 "JOIN playlists on playlists.song = songs.id " +
-                "JOIN users on playlists.user = users.id " +
-                "WHERE username='" + cookieUserName + "'";
+                "WHERE user=" + cookieUserID;
         ArrayList<Song> songs = db.fetchSongs(query);
 
         StringBuilder sb = new StringBuilder();
@@ -65,41 +64,48 @@ public class PlayListServlet extends HttpServlet {
 //        ArrayList<Song> dataSongs = allData.getSongs();
         Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
-        String cookieUserName = "";
+        String cookieUserID = "";
         for (Cookie c : cookies) {
-            if (c.getName().equals("username")) {
-                cookieUserName = c.getValue();
+            if (c.getName().equals("userID")) {
+                cookieUserID = c.getValue();
             }
         }
-        if (cookieUserName.equals("")) {
+        if (cookieUserID.equals("")) {
             response.sendRedirect("/login");
         } else {
-            String songIDStr = request.getParameter("songID");
-            int songID = Integer.parseInt(songIDStr);
-            String findQuery = "SELECT COUNT(*) as c, users.id as userID FROM playlists " +
-                    "JOIN users on users.id = playlists.user " +
-                    "WHERE username ='" + cookieUserName +
-                    "' AND song=" + songID;
-            boolean songExists = false;
-            int userID = 0;
-            try {
-                ResultSet rs = db.query(findQuery);
-                while (rs.next()) {
-                    userID = rs.getInt("userID");
-                    out.println(userID);
-                    if (rs.getInt("c") > 0) {
-                        songExists = true;
+            String songIDStr = request.getParameter("AddSongID");
+            if (songIDStr != null) {
+                int songID = Integer.parseInt(songIDStr);
+                String findQuery = "SELECT COUNT(*) as c FROM playlists " +
+                        "WHERE user =" + cookieUserID + " AND song=" + songID;
+                boolean songExists = false;
+                try {
+                    ResultSet rs = db.query(findQuery);
+                    while (rs.next()) {
+                        if (rs.getInt("c") > 0) {
+                            songExists = true;
+                        }
                     }
+                    if (!songExists) {
+                        String insertQuery = "INSERT INTO playlists (user, song) values (" + cookieUserID + ", " + songID + ")";
+                        db.update(insertQuery);
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-                if (!songExists) {
-                    String insertQuery = "INSERT INTO playlists (user, song) values (" + userID + ", " + songID + ")";
-                    db.update(insertQuery);
+            } else {
+                songIDStr = request.getParameter("DeleteSongID");
+                int songID = Integer.parseInt(songIDStr);
+                try {
+                    String deleteQuery = "DELETE FROM playlists WHERE user=" + cookieUserID + " AND song=" + songID;
+                    db.update(deleteQuery);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
             }
+
             response.setContentType("text/html");
-            out.println(getContent("src/playlist.html") + fetchContent(cookieUserName));
+            out.println(getContent("src/playlist.html") + fetchContent(cookieUserID));
         }
 
 //        List<String> list = Arrays.asList(names);
@@ -133,17 +139,17 @@ public class PlayListServlet extends HttpServlet {
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
-        String cookieUserName = "";
+        String cookieUserID = "";
         for (Cookie c : cookies) {
-            if (c.getName().equals("username")) {
-                cookieUserName = c.getValue();
+            if (c.getName().equals("userID")) {
+                cookieUserID = c.getValue();
             }
         }
-        if (cookieUserName.equals("")) {
+        if (cookieUserID.equals("")) {
             response.sendRedirect("/login");
         } else {
             response.setContentType("text/html");
-            out.println(getContent("src/playlist.html") + fetchContent(cookieUserName));
+            out.println(getContent("src/playlist.html") + fetchContent(cookieUserID));
         }
     }
 
