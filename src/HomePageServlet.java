@@ -13,13 +13,13 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.security.*;
 
-public class HomePage extends HttpServlet {
+public class HomePageServlet extends HttpServlet {
 
 
     private String message;
     private IOManager db;
 
-    public HomePage(IOManager db) {
+    public HomePageServlet(IOManager db) {
         super();
         this.db = db;
     }

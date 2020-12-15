@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         } else {
             response.setContentType("text/html");
             String content = getContent();
-            out.println("<h2>" + message + "</h2> <br>");
+            //out.println("<h2>" + message + "</h2> <br>"); don't need this anymore
             out.println(content);
         }
     }

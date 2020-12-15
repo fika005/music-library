@@ -67,7 +67,7 @@ public class IOManager {
         return desc;
     }
 
-    public ArrayList<Song> fetchSongs(String queryStr) {
+    public ArrayList<Song> fetchSongs(String queryStr, boolean desc) {
         String songName = "";
         String artistName = "";
         String albumName = "";
@@ -101,7 +101,9 @@ public class IOManager {
                     album = new Album(albumName);
                     albums.put(albumID, album);
                 }
-                description = fetchDescription(songName, artistName);
+                if (desc) {
+                    description = fetchDescription(songName, artistName);
+                }
                 Song song = new Song(songName, artist, album, songID, description);
                 songs.add(song);
             }

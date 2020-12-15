@@ -27,11 +27,12 @@ public class LibraryServer {
         IOManager db = new IOManager();
         handler.addServletWithMapping(new ServletHolder(new LoginServlet()), "/login");
         handler.addServletWithMapping(new ServletHolder(new SignUpServlet()), "/signup");
-        handler.addServletWithMapping(new ServletHolder(new HomePage(db)), "/homePage");
+        handler.addServletWithMapping(new ServletHolder(new HomePageServlet(db)), "/homePage");
         handler.addServletWithMapping(new ServletHolder(new ShowAllSongsServlet(db)), "/showAllSongs");
         handler.addServletWithMapping(new ServletHolder(new PlayListServlet(db)), "/playlist");
         handler.addServletWithMapping(new ServletHolder(new SearchServlet()), "/search");
-        handler.addServletWithMapping(new ServletHolder(new SearchResponse(db)), "/searchResult");
+        handler.addServletWithMapping(new ServletHolder(new SearchResponseServlet(db)), "/searchResult");
+        handler.addServletWithMapping(new ServletHolder(new DescriptionServlet(db)), "/description");
 
 
         server.setHandler(handler);

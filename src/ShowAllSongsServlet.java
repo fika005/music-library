@@ -56,11 +56,11 @@ public class ShowAllSongsServlet extends HttpServlet {
                     "songs.id as songID, artists.id as artistID, albums.id as albumID FROM songs " +
                     "LEFT JOIN artists on songs.artist = artists.id " +
                     "LEFT JOIN albums on songs.album = albums.id";
-            ArrayList<Song> songs = db.fetchSongs(query);
+            ArrayList<Song> songs = db.fetchSongs(query, false);
             response.setContentType("text/html");
             StringBuilder sb = new StringBuilder();
             for (Song s: songs) {
-                sb.append(s.toHTML(false));
+                sb.append(s.toHTML("allSongs"));
             }
             out.println(getContent() + sb.toString());
         }

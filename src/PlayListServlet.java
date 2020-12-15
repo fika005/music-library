@@ -15,8 +15,6 @@ import java.util.*;
 
 public class PlayListServlet extends HttpServlet {
     private String message;
-    Library myLibrary;
-    Library allData;
     private IOManager db;
 
     public PlayListServlet(IOManager db) {
@@ -49,19 +47,17 @@ public class PlayListServlet extends HttpServlet {
                 "LEFT JOIN albums on songs.album = albums.id " +
                 "JOIN playlists on playlists.song = songs.id " +
                 "WHERE user=" + cookieUserID;
-        ArrayList<Song> songs = db.fetchSongs(query);
+        ArrayList<Song> songs = db.fetchSongs(query, false);
 
         StringBuilder sb = new StringBuilder();
         for (Song s: songs) {
-            sb.append(s.toHTML(true));
+            sb.append(s.toHTML("playlist"));
         }
         return sb.toString();
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        ArrayList<Song> allSongs = myLibrary.getSongs();
-//        ArrayList<Song> dataSongs = allData.getSongs();
         Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
         String cookieUserID = "";
@@ -108,31 +104,6 @@ public class PlayListServlet extends HttpServlet {
             out.println(getContent("src/playlist.html") + fetchContent(cookieUserID));
         }
 
-//        List<String> list = Arrays.asList(names);
-//        if (list.size() != 0) {
-//            for (String song : list) {
-//                for (Song s : dataSongs) {
-//                    if (song.equals(s.getName()+s.getArtist().getName())) {
-//                        if (!allSongs.contains(s)) {
-//                            myLibrary.writeToFile(s.toString());
-//                            allSongs.add(s);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//        StringBuilder sb = new StringBuilder();
-//        out.println("<h2>" + message + "</h2>" + "<br>" );
-//
-//        for (Song s : allSongs) {
-//
-//            sb.append(s.toHTML(true));
-//        }
-//
-//        out.println(getContent("src/playlist.html") + sb.toString()
-//                + getContent("src/deleteRow.html"));
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -1,29 +1,91 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+
+
+html {
+  font-family: "Lucida Sans", sans-serif;
+    text-align: center;
+
+}
+
+.header {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 10px;
+  text-align: center;
+
+}
+
+.header-content-inner img {
+  vertical-align:middle;
+  display:inline;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+ background-color: #33b5e5;
+  border: 1px #33b5e5;
+  color: white;
+  padding: 8px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  width: 275px;
+  display: block;
+  border-radius: 12px;
+  margin-bottom: 7px;
+}
+</style>
     <title>Login Page</title>
 </head>
 <body>
+    <div class="header">
+    <div class="header-content-inner img">
+        <h1><img src="https://cdn140.picsart.com/277051554043211.png?type=webp&to=min&r=640" alt="logo" width="40" height="40">
+            Meowsiclib</h1> <br><br>
+    </div>
+</div>
+<br>
+
+<div class="center" >
 <form action="/homePage" method="POST">
-    <p>
+    <p><b>
     Enter your username and password:
-    </p>
-    <p>
+    </b></p><br>
+    <p><b>
     Username
     <input type="text" name = "username">
-    </p>
-    <p>
+    </b></p>
+    <p><b>
     Password
     <input type="password" name = "password">
-    </p>
+    </b></p>
     <p>
     <input type="submit" value="Login" name="type"/>
     </p>
 </form>
+<br><p>Don't have an account?</p>
 <form action="/signup" method="GET">
+
     <p>
         <input type="submit" value="Sign Up"/>
     </p>
 </form>
+</div>
+
 </body>
 </html>

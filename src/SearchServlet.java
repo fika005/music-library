@@ -34,11 +34,22 @@ public class SearchServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
+        Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
-        out.println("<h2>" + message + "</h2>" + "<br>" );
-        String content = getContent();
-        out.println(content);
+        String cookieUserID = "";
+        for (Cookie c : cookies) {
+            if (c.getName().equals("userID")) {
+                cookieUserID = c.getValue();
+            }
+        }
+        if (cookieUserID.equals("")) {
+            response.sendRedirect("/login");
+        } else {
+            response.setContentType("text/html");
+            out.println("<h2>" + message + "</h2>" + "<br>");
+            String content = getContent();
+            out.println(content);
+        }
     }
 
     public void destroy() {
