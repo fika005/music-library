@@ -116,7 +116,7 @@ public class HomePageServlet extends HttpServlet {
             if (userExists && hash(pw).equals(actualPassword)) {
                 Cookie cookie1 = new Cookie("username", un);
                 Cookie cookie2 = new Cookie("userID", Integer.toString(userID));
-                int timeout = 60 * 60 * 24;
+                int timeout = 60 * 60 * 24 ;
                 cookie1.setMaxAge(timeout);
                 cookie2.setMaxAge(timeout);
                 response.addCookie(cookie1);
@@ -145,9 +145,11 @@ public class HomePageServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         String cookieUserName = "";
-        for (Cookie c : cookies) {
-            if (c.getName().equals("username")) {
-                cookieUserName = c.getValue();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("username")) {
+                    cookieUserName = c.getValue();
+                }
             }
         }
         if (cookieUserName.equals("")) {

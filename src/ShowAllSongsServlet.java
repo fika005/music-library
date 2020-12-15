@@ -52,9 +52,11 @@ public class ShowAllSongsServlet extends HttpServlet {
         Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
         String cookieUserName = "";
-        for (Cookie c : cookies) {
-            if (c.getName().equals("username")) {
-                cookieUserName = c.getValue();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("username")) {
+                    cookieUserName = c.getValue();
+                }
             }
         }
         if (cookieUserName.equals("")) {

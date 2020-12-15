@@ -54,9 +54,11 @@ public class SearchResponseServlet extends HttpServlet{
         Cookie[] cookies = request.getCookies();
         PrintWriter out = response.getWriter();
         String cookieUserID = "";
-        for (Cookie c : cookies) {
-            if (c.getName().equals("userID")) {
-                cookieUserID = c.getValue();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("userID")) {
+                    cookieUserID = c.getValue();
+                }
             }
         }
         if (cookieUserID.equals("")) {
