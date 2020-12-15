@@ -132,7 +132,7 @@ public class SearchResponseServlet extends HttpServlet{
                     out.println("<img src=\n" +
                             "             \"https://i.pinimg.com/originals/a6/3c/fa/a63cfab6e608ac497ed0229d10daab57.png\"\n" +
                             "     alt=\"Search Photo\"\n" +
-                            "      style=\"vertical-align:center;margin:-400px 400px\">");
+                            "      width=\"500\" height=\"550\" style=\"vertical-align:center;margin:-200px 450px\">");
                 }
             }
         }
