@@ -53,7 +53,7 @@ public class SearchServlet extends HttpServlet {
             response.sendRedirect("/login");
         } else {
             response.setContentType("text/html");
-            out.println("<h2>" + message + "</h2>" + "<br>");
+            //out.println("<h2>" + message + "</h2>" + "<br>");
             String content = getContent();
             out.println(content);
         }

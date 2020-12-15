@@ -63,7 +63,6 @@ public class SearchResponseServlet extends HttpServlet{
             response.sendRedirect("/login");
         } else {
             response.setContentType("text/html");
-            out.println("<h2>" + message + "</h2>" + "<br>" );
             String inputParameter = request.getParameter("action");
             StringBuilder resp = new StringBuilder();
             ArrayList result = new ArrayList();
@@ -89,13 +88,13 @@ public class SearchResponseServlet extends HttpServlet{
                 }
 
                 if (check) {
-                    out.println("<h3> Album <strong><i>" + albumName + " </strong></i> is found:" );
                     StringBuilder sb = new StringBuilder();
                     for (int i=0; i < songNames.size(); i ++) {
                         sb.append("<tr><td>").append(albumName).append("</td><td>").append(artistNames.get(i)).append(
                                 "</td><td>").append(songNames.get(i)).append("</tr>");
                     }
                     out.println(getContent("src/album.html") + sb.toString());
+                    out.println("<h3> Album <strong><i>" + albumName + " </strong></i> is found:" );
                 } else {
                     out.println("<p> The album name <strong><i>" + albumName + " </strong></i>does not exist in the database.<p>");
                 }
@@ -117,12 +116,12 @@ public class SearchResponseServlet extends HttpServlet{
                 }
 
                 if (check) {
-                    out.println("<h3> Artist <strong><i>" + artistName + " </strong></i> is found:");
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < songNames.size(); i++) {
                         sb.append("<tr><td>").append(artistName).append("</td><td>").append(albumNames.get(i)).append("</td><td>").append(songNames.get(i)).append("</tr>");
                     }
                     out.println(getContent("src/artists.html") + sb.toString());
+                    out.println("<h3> Artist <strong><i>" + artistName + " </strong></i> is found:");
                 } else {
                     out.println("<p> The artist name <strong><i>" + artistName + " </strong></i>does not exist in the database.<p>");
                 }
