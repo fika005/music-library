@@ -94,7 +94,7 @@ public class SearchResponseServlet extends HttpServlet{
                                 "</td><td>").append(songNames.get(i)).append("</tr>");
                     }
                     out.println(getContent("src/album.html") + sb.toString());
-                    out.println("<h3> Album <strong><i>" + albumName + " </strong></i> is found:" );
+                    out.println("<h3> Album <strong><i>" + albumName + " </strong></i> is found: " );
                 } else {
                     out.println("<p> The album name <strong><i>" + albumName + " </strong></i>does not exist in the database.<p>");
                 }

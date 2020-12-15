@@ -87,19 +87,19 @@ public class Song extends Entity {
      */
     public String toHTML(String page) {
         String htm = "<tr><td> " + name + "    </td><td> " + artist.getName() +
-                "    </td><td> " + album.getName() + "    </td><td> ";
+                "    </td><td> " + album.getName() + "    </td><td style=\"text-align:justify\"> ";
         if (page =="description") {
             htm += description + "</td>";
         } else {
-            htm += "<form action=\"/description\" method=\"POST\"><button name=\"descSongID\" value=\"" + id +
-                    "\" type=\"submit\">Show Description</button></form></td>\n";
+            htm += "<div class= \"menu\"><form action=\"/description\" method=\"POST\"><button name=\"descSongID\" value=\"" + id +
+                    "\" type=\"submit\">Show Description</button></form></td></div>\n";
         }
         if (page.equals("playlist")) {
-            htm += "<td><form action=\"/playlist\" method=\"POST\"><button name=\"DeleteSongID\" value=\"" + id +
-                    "\" type=\"submit\">Delete</button></form></td>\n";
+            htm += "<div class= \"menu\"><td><form action=\"/playlist\" method=\"POST\"><button name=\"DeleteSongID\" value=\"" + id +
+                    "\" type=\"submit\">Delete</button></form></td></div>\n";
         } else if (page.equals("allSongs")) {
-            htm += "<td><form action=\"/playlist\" method=\"POST\"><button name=\"AddSongID\" value=\"" + id +
-                    "\" type=\"submit\">Add</button></form></td>\n";
+            htm += "<div class= \"menu\"><td><form action=\"/playlist\" method=\"POST\"><button name=\"AddSongID\" value=\"" + id +
+                    "\" type=\"submit\">Add</button></form></td></div>\n";
         }
         htm += "</tr>";
         return htm;

@@ -14,15 +14,54 @@
           vertical-align:middle;
           display:inline;
         }
-        table, th, td {
-          border: 1px solid black;
+          table {
           border-collapse: collapse;
-        }
-        th, td {
-          padding: 5px;
+          width: 65%;
         }
         th {
-          text-align: left;
+          background-color: #9999ff;
+          color: black;
+          padding: 12px;
+          text-align: center;
+          border-bottom: 1px solid #ddd;
+        }
+          td {
+          padding: 12px;
+          text-align: center;
+          border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {background-color: #e6e6ff;}
+
+                        .menu .button {
+          background-color: #33b5e5;
+          border: 1px #33b5e5;
+          color: white;
+          padding: 8px;
+          text-align: center;
+          text-decoration: none;
+          font-size: 16px;
+          cursor: pointer;
+          width: 150px;
+          display: block;
+          border-radius: 12px;
+          box-shadow: 0 1px 5px rgba(0,0,0,0.60), 0 1px 2px rgba(0,0,0,0.75);
+          margin-bottom: 7px;
+
+
+        }
+
+        .menu .button:not(:last-child) {
+          border-bottom: none; /* Prevent double borders */
+        }
+
+        .menu .button:hover {
+          background-color: #9933cc;
+        }
+
+          table.center {
+          margin-left: auto;
+          margin-right: auto;
         }
 </style>
 </head>
@@ -35,8 +74,8 @@
     </div>
 </div>
 <br><br>
-
-<table style="width:50%">
+<div class= "menu">
+<table class= "center">
     <tr>
         <th>Song</th>
         <th>Artist</th>
