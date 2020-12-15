@@ -116,8 +116,9 @@ public class HomePageServlet extends HttpServlet {
             if (userExists && hash(pw).equals(actualPassword)) {
                 Cookie cookie1 = new Cookie("username", un);
                 Cookie cookie2 = new Cookie("userID", Integer.toString(userID));
-                cookie1.setMaxAge(600);
-                cookie2.setMaxAge(600);
+                int timeout = 60 * 60 * 24;
+                cookie1.setMaxAge(timeout);
+                cookie2.setMaxAge(timeout);
                 response.addCookie(cookie1);
                 response.addCookie(cookie2);
                 response.setContentType("text/html");
