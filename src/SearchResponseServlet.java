@@ -96,7 +96,11 @@ public class SearchResponseServlet extends HttpServlet{
                     out.println(getContent("src/album.html") + sb.toString());
                     out.println("<h3> Album <strong><i>" + albumName + " </strong></i> is found: " );
                 } else {
-                    out.println("<p> The album name <strong><i>" + albumName + " </strong></i>does not exist in the database.<p>");
+                    out.println("<br><h3> Sorry! We couldn't find <strong><i>" + albumName + " </strong></i>in our database.</h3>");
+                    out.println("<p>But we found you these cute kitties! Enjoy!</p>");
+                    out.println("<img src=\n" + "             \"https://i.pinimg.com/originals/f8/a9/04/f8a904a75bec4621cf1dd6168304f266.png\"\n" +
+                            "     alt=\"Search Photo\"\n" +
+                            "     width=\"500\" height=\"500\" style=\"vertical-align:center;margin:-30px 400px\">");
                 }
             } else if (inputParameter.equals("Artist Search")) {
                 String artistName = request.getParameter("input");
@@ -123,7 +127,12 @@ public class SearchResponseServlet extends HttpServlet{
                     out.println(getContent("src/artists.html") + sb.toString());
                     out.println("<h3> Artist <strong><i>" + artistName + " </strong></i> is found:");
                 } else {
-                    out.println("<p> The artist name <strong><i>" + artistName + " </strong></i>does not exist in the database.<p>");
+                    out.println("<br><h3> The artist name <strong><i>" + artistName + " </strong></i>does not exist in the database.</h3>");
+                    out.println("<p>But look! Our kitty found you a little fish!</p>");
+                    out.println("<img src=\n" +
+                            "             \"https://i.pinimg.com/originals/a6/3c/fa/a63cfab6e608ac497ed0229d10daab57.png\"\n" +
+                            "     alt=\"Search Photo\"\n" +
+                            "      style=\"vertical-align:center;margin:-400px 400px\">");
                 }
             }
         }
