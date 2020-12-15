@@ -1,5 +1,4 @@
 package src;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +11,9 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-
+/**
+ * The servlet to handle playlist page
+ */
 public class PlayListServlet extends HttpServlet {
     private String message;
     private IOManager db;
@@ -40,6 +41,11 @@ public class PlayListServlet extends HttpServlet {
         return result.toString();
     }
 
+    /**
+     * fetch the html content of the playlist page
+     * @param cookieUserID user that the playlist belongs to
+     * @return html as string
+     */
     public String fetchContent(String cookieUserID) {
         String query = "SELECT songs.name as song, artists.name as artist, albums.name as album," +
                 "songs.id as songID, artists.id as artistID, albums.id as albumID FROM songs " +
@@ -55,7 +61,15 @@ public class PlayListServlet extends HttpServlet {
         }
         return sb.toString();
     }
-
+    /**
+     * The main function to handle the post requests to this servlet. For the current user fetch and chosen song, either
+     * delete the song from the playlist table or add it depending on which page we came from. then show the contents of
+     * the playlist.
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();
@@ -105,7 +119,14 @@ public class PlayListServlet extends HttpServlet {
         }
 
     }
-
+    /**
+     * The main function to handle the get requests to this servlet. if the user is logged in, show the playlist
+     * content otherwise redirect ot login page
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();

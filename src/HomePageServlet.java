@@ -25,7 +25,6 @@ public class HomePageServlet extends HttpServlet {
     }
 
     public void init() throws ServletException {
-        // Do required initialization
         message = "Home Page";
     }
 
@@ -58,10 +57,20 @@ public class HomePageServlet extends HttpServlet {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
         return byteArrayToHex(pwHashedBytes);
     }
-
+    /**
+     * The main function to handle the post requests to this servlet. This servelet handles many things.
+     * first it makes sure that the user pass used for login is valid if we are coming from the login page.
+     * In that case, it registers a cookie to keep the user's session alive.
+     * if we are coming from the sign up page, it checks if the user already exists and if not, stores the new
+     * user into the users table and redirects to the login page.
+     * finally it shows the main homepage content.
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
@@ -91,13 +100,6 @@ public class HomePageServlet extends HttpServlet {
                 throwables.printStackTrace();
             }
         } else {
-            Cookie[] cookies = request.getCookies();
-            String cookieVal = "";
-            for (Cookie c : cookies) {
-                if (c.getName().equals("username")) {
-                    cookieVal = c.getValue();
-                }
-            }
             String actualPassword = "";
             boolean userExists = false;
             int userID = 0;
@@ -129,6 +131,13 @@ public class HomePageServlet extends HttpServlet {
         }
     }
 
+    /**
+     * if the user is already logged in, show the homepage, otherwise redirect to the login page
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();

@@ -1,20 +1,19 @@
 package src;
-
 import java.util.ArrayList;
-
+/**
+The class to represent an Album entity
+ */
 public class Album extends Entity {
     ArrayList<Song> songs;
     Artist artist;
     String totalLength;
 
-    /* you complete this */
     public Album() {
-        songs = new ArrayList<Song>();
+        songs = new ArrayList<>();
         artist = new Artist();
         totalLength = "";
     }
 
-    /* you complete this */
     public Album(String n, ArrayList<Song> songs, Artist artist, String totalLength) {
         super(n);
         this.songs = songs;
@@ -22,7 +21,7 @@ public class Album extends Entity {
         this.totalLength = totalLength;
     }
 
-    /* you complete this */
+
     public Album(String n) {
         super(n);
         songs = new ArrayList<Song>();
@@ -31,7 +30,6 @@ public class Album extends Entity {
 
     }
 
-    /* add setters and getters here */
 
     public ArrayList<Song> getSongs() {
         return songs;
@@ -57,7 +55,10 @@ public class Album extends Entity {
         this.totalLength = totalLength;
     }
 
-    /* you complete this */
+    /**
+     * Turns the Album calss into a string representation
+     * @return a string version
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Album: ");
@@ -70,6 +71,10 @@ public class Album extends Entity {
         return sb.toString();
     }
 
+    /**
+     * Represent the Album class in html format.
+     * @return string of html representation
+     */
     public String toHTML() {
         StringBuilder sb = new StringBuilder();
         sb.append("<tr><td>" + getName() + "</td>");
@@ -83,11 +88,19 @@ public class Album extends Entity {
         return sb.toString();
     }
 
+    /**
+     * turns the album into a sql insert query representation
+     * @return string of sql query
+     */
     public String toSQL() {
         return "INSERT INTO albums values (" + "\"" + getName()  + ")";
     }
 
-    /* you complete this. Assume that two albums are equal if they have the same name and the same artist. */
+    /**
+     * checks whether the other album is equivalent to the current object
+     * @param otherAlbum other album
+     * @return true if they are equivalent
+     */
     public boolean equals(Album otherAlbum) {
         if (this.name.equals(otherAlbum.getName()) && this.artist.name.equals(otherAlbum.artist.getName()) &&
         this.songs.containsAll(otherAlbum.getSongs()) && otherAlbum.getSongs().containsAll(this.songs)) {

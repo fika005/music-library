@@ -1,5 +1,7 @@
-package src;/* This class represents a Song */
-
+package src;
+/**
+ * The class that holds songs information
+ */
 public class Song extends Entity {
     String filename;
     Artist artist;
@@ -9,7 +11,6 @@ public class Song extends Entity {
     int id;
     String description;
 
-    /* you complete this */
     public Song() {
         filename = "";
         artist = new Artist();
@@ -18,7 +19,6 @@ public class Song extends Entity {
         album = new Album();
     }
 
-    /* you complete this */
     public Song(String title, String filename, Artist artist, Album album, int timesPlayed, String runningTime) {
         super(title);
         this.filename = filename;
@@ -36,7 +36,6 @@ public class Song extends Entity {
         this.description = description;
     }
 
-    /* add setters and getters */
 
     public String getFilename() {
         return filename;
@@ -70,13 +69,22 @@ public class Song extends Entity {
         this.runningTime = runningTime;
     }
 
-    /* you complete this */
+    /**
+     * represent the song info in string format
+     * @return song info in string
+     */
     public String toString() {
         String songOutput =
                 "Song name: " + name + "; Artist: " + artist.getName() + "; Time played: " +
                         timesPlayed + "; Running time: " + runningTime;
         return songOutput;
     }
+
+    /**
+     * depending on where we want to show a song info, we turn a song into HTML format
+     * @param page which page the song will be shown
+     * @return
+     */
     public String toHTML(String page) {
         String htm = "<tr><td> " + name + "    </td><td> " + artist.getName() +
                 "    </td><td> " + album.getName() + "    </td><td> ";
@@ -97,6 +105,11 @@ public class Song extends Entity {
         return htm;
     }
 
+    /**
+     * turns a song into an insert query into playlist table
+     * @param user for which user this song is added to playlist
+     * @return query
+     */
     public String toSQLPlaylist(int user) {
         return "INSERT INTO playlists (user, song) values (" + user + ", " + this.id  + ")";
     }
@@ -108,5 +121,4 @@ public class Song extends Entity {
             return false;
         }
     }
-
 }

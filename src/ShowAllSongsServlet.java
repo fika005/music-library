@@ -1,5 +1,4 @@
 package src;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.File;
@@ -8,7 +7,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ * The servlet to handle showallsongs page
+ */
 public class ShowAllSongsServlet extends HttpServlet {
 
 
@@ -38,7 +39,14 @@ public class ShowAllSongsServlet extends HttpServlet {
         }
         return result;
     }
-
+    /**
+     * The main function to handle the get requests to this servlet. Query the database for all relevant info
+     * on songs and show the results.
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();

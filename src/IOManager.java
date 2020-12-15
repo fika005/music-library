@@ -3,9 +3,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,26 +15,51 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * A class to handle all IO communication for our server
+ */
 public class IOManager {
     Connection connection = null;
-    public IOManager() throws SQLException, FileNotFoundException {
-        File f = new File("src/music.db");
-        if(f.exists() && !f.isDirectory()) {
-            connection = DriverManager.getConnection("jdbc:sqlite:src/music.db");
-        }
+
+    /**
+     * makes the connection to the database
+     * @throws SQLException
+     */
+    public IOManager() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:sqlite:src/music.db");
     }
 
+    /**
+     * Given a query as string, queries the database
+     * @param queryStr query in string format
+     * @return result set of the query
+     * @throws SQLException
+     */
     public ResultSet query(String queryStr) throws SQLException {
         Statement statement = connection.createStatement();
         statement.setQueryTimeout(30);
         return statement.executeQuery(queryStr);
     }
 
+    /**
+     * given a string query performs updates on the table
+     * @param queryStr query as string
+     * @throws SQLException
+     */
     public void update(String queryStr) throws SQLException {
         Statement statement = connection.createStatement();
         statement.setQueryTimeout(30);
         statement.executeUpdate(queryStr);
     }
+
+    /**
+     * calls the REST API to fetch a song description based on its name and artist name.
+     * @param songName name of the song
+     * @param artistName name of the artist
+     * @return the description of the song if found otherwise null
+     * @throws IOException
+     * @throws ParseException
+     */
     public String fetchDescription(String songName, String artistName) throws IOException, ParseException {
         String baseURL = "https://theaudiodb.com/api/v1/json/1/searchtrack.php?s=";
         String urlStr = baseURL + artistName.replace(" ", "%20") + "&t=" + songName.replace(" ", "%20");
@@ -67,6 +89,12 @@ public class IOManager {
         return desc;
     }
 
+    /**
+     * Given a query to fetch songs, query the appropriate tables and return an arraylist of song objects.
+     * @param queryStr query to use
+     * @param desc whether to fetch description.
+     * @return array list of found songs in the database with album and artist info.
+     */
     public ArrayList<Song> fetchSongs(String queryStr, boolean desc) {
         String songName = "";
         String artistName = "";

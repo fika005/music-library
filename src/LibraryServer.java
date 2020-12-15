@@ -21,9 +21,7 @@ public class LibraryServer {
      */
     public static void main(String[] args) throws Exception {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(PORT); // jetty server
-
         ServletHandler handler = new ServletHandler();
-
         IOManager db = new IOManager();
         handler.addServletWithMapping(new ServletHolder(new LoginServlet()), "/login");
         handler.addServletWithMapping(new ServletHolder(new SignUpServlet()), "/signup");
@@ -33,10 +31,7 @@ public class LibraryServer {
         handler.addServletWithMapping(new ServletHolder(new SearchServlet()), "/search");
         handler.addServletWithMapping(new ServletHolder(new SearchResponseServlet(db)), "/searchResult");
         handler.addServletWithMapping(new ServletHolder(new DescriptionServlet(db)), "/description");
-
-
         server.setHandler(handler);
-
         server.start();
         server.join();
     }

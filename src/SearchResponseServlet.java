@@ -1,5 +1,4 @@
 package src;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ * The servlet to handle searchresponse page
+ */
 public class SearchResponseServlet extends HttpServlet{
     private String message;
     private IOManager db;
@@ -24,7 +25,6 @@ public class SearchResponseServlet extends HttpServlet{
     }
 
     public void init() throws ServletException {
-        // Do required initialization
         message = "Search Result";
     }
 
@@ -41,7 +41,14 @@ public class SearchResponseServlet extends HttpServlet{
         }
         return result;
     }
-
+    /**
+     * The main function to handle the post requests to this servlet, based on album or artist search, query the
+     * database and show the result
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();

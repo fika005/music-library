@@ -1,5 +1,4 @@
 package src;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
+/**
+ * The servlet to handle search page
+ */
 public class SearchServlet extends HttpServlet {
     private String message;
 
@@ -31,7 +32,13 @@ public class SearchServlet extends HttpServlet {
         }
         return result;
     }
-
+    /**
+     * The main function to handle the get requests to this servlet
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();

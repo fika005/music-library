@@ -1,25 +1,23 @@
 package src;
-
 import java.util.ArrayList;
 
+/**
+ * The class to represent an artist
+ */
 public class Artist extends Entity {
     ArrayList<Song> songs;
     ArrayList<Album> albums;
 
-    /* you complete this */
     public Artist() {
-        songs = new ArrayList<Song>();
-        albums = new ArrayList<Album>();
+        songs = new ArrayList<>();
+        albums = new ArrayList<>();
     }
 
-    /* you complete this */
     public Artist(String name) {
         super(name);
-        songs = new ArrayList<Song>();
-        albums = new ArrayList<Album>();
+        songs = new ArrayList<>();
+        albums = new ArrayList<>();
     }
-
-    /* add setters and getters */
 
     public ArrayList<Song> getSongs() {
         return songs;
@@ -37,6 +35,10 @@ public class Artist extends Entity {
         this.albums = albums;
     }
 
+    /**
+     * string representation of an artist entity
+     * @return string of the representation
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Artist: ");
@@ -54,6 +56,10 @@ public class Artist extends Entity {
         return sb.toString();
     }
 
+    /**
+     * html representation of artist
+     * @return string of html representation
+     */
     public String toHTML() {
         StringBuilder sb = new StringBuilder();
         sb.append("<tr><td>" + getName() + "</td>");
@@ -62,21 +68,27 @@ public class Artist extends Entity {
             sb.append("<li>" + s.name + "</li>");
         }
         sb.append("</ul></td>");
-
-//        sb.setLength(sb.length() - 2);
         sb.append("<td><ul>");
         for (Album a : albums){
             sb.append("<li>" + a.name + "</li>");
         }
         sb.append("</ul></td></tr>");
-//        sb.setLength(sb.length() - 2);
         return sb.toString();
     }
 
+    /**
+     * Turns the artist info into a sql insert query
+     * @return string version of insert query
+     */
     public String toSQL() {
-        return "INSERT INTO songs values (" + "\"" + getName() + "\")";
+        return "INSERT INTO artists values (" + "\"" + getName() + "\")";
     }
-    /* you complete this. Assume that two artists are equal if they have the same name. */
+
+    /**
+     * checks whether the current object is equal another artist object
+     * @param otherArtist other
+     * @return true if they are equivalent
+     */
     public boolean equals(Artist otherArtist) {
         if (this.name.equals(otherArtist.getName()) && this.albums.containsAll(otherArtist.getAlbums()) &&
             otherArtist.getAlbums().containsAll(this.albums)) {

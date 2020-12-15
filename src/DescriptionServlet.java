@@ -1,5 +1,4 @@
 package src;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -9,11 +8,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * a servlet class to handle description page
+ */
 public class DescriptionServlet extends HttpServlet {
     private String message;
     private IOManager db;
@@ -41,6 +41,14 @@ public class DescriptionServlet extends HttpServlet {
         return result.toString();
     }
 
+    /**
+     * The main function to handle the post requests to this servlet. Here we decode which show description button
+     * is pressed and then we fetcht the saved data in the database plus we call the REST API for getting the description
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();

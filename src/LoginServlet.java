@@ -1,5 +1,4 @@
 package src;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -11,11 +10,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+/**
+ * The servlet to handle login page
+ */
 public class LoginServlet extends HttpServlet {
     private String message;
 
     public void init() throws ServletException {
-        // Do required initialization
         message = "Login Page";
     }
 
@@ -31,7 +32,13 @@ public class LoginServlet extends HttpServlet {
         }
         return result;
     }
-
+    /**
+     * The main function to handle the get requests to this servlet
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();
@@ -47,15 +54,19 @@ public class LoginServlet extends HttpServlet {
         } else {
             response.setContentType("text/html");
             String content = getContent();
-            //out.println("<h2>" + message + "</h2> <br>"); don't need this anymore
             out.println(content);
         }
     }
-
+    /**
+     * The main function to handle the post requests to this servlet
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html");
-//        String message = (String) request.getSession().getAttribute("name");
         PrintWriter out = response.getWriter();
         out.println("<h2>" + "wrong" + "</h2> <br>");
         String content = getContent();

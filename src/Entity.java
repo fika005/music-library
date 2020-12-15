@@ -1,7 +1,9 @@
 package src;
-
 import java.time.LocalDate;
 
+/**
+ * base class for all entities
+ */
 public class Entity {
     String name;
     LocalDate dateCreated;
