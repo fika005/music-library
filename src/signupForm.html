@@ -3,6 +3,9 @@
     <meta charset="UTF-8">
     <style>
 
+    html {
+      font-family: "Lucida Sans", sans-serif;
+    }
 
       .header {
       background-color: #ffffff;
@@ -16,8 +19,33 @@
       vertical-align:middle;
       display:inline;
     }
+
+        .center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      text-align: center;
+
+    }
+
+    input[type=submit] {
+     background-color: #33b5e5;
+      border: 1px #33b5e5;
+      color: white;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+      width: 275px;
+      display: block;
+      border-radius: 12px;
+      margin-bottom: 7px;
+    }
     </style>
-    <title>Sign Up Page</title>
 </head>
 <body>
 
@@ -28,7 +56,8 @@
 
     </div>
 </div>
-<br><br>
+<div class="center" >
+<h2>Sign Up </h2><br>
 <form action="/homePage" method="POST">
     <p>
     Enter your name, username and password:
@@ -49,5 +78,6 @@
     <input type="submit" value="Signup" name="type"/>
     </p>
 </form>
+</div>
 </body>
 </html>

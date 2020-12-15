@@ -41,7 +41,6 @@ public class SignUpServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println("<h2>" + message + "</h2> <br>");
         String content = getContent();
         out.println(content);
     }
