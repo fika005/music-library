@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="jsonSimple">
+    <CLASSES>
+      <root url="file://$USER_HOME$/tools/jsonSimple" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/tools/jsonSimple/json-simple/src/main/java" />
+      <root url="file://$USER_HOME$/tools/jsonSimple/json-simple/src/test/java" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/tools/jsonSimple" recursive="false" />
+  </library>
+</component>
